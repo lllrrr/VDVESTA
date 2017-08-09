@@ -12,7 +12,7 @@ os=$(cut -f 1 -d ' ' /etc/redhat-release)
 release=$(grep -o "[0-9]" /etc/redhat-release |head -n1)
 arch=`arch`
 random=`cat /dev/urandom | tr -cd 'A-Z0-9' | head -c 5`
-password=`cat /dev/urandom | tr -cd 'A-Z0-9' | head -c 10`
+password=`cat /dev/urandom | tr -cd 'A-Z0-9' | head -c 20`
 IP=`curl -s -L http://cpanel.net/showip.cgi`
 if [ ! -f /etc/redhat-release ] || [ "$os" != "CentOS" ] || [ "$release" != "7" ]; then
 echo 'ERROR! Please use CentOS Linux release 7 x86_64!
@@ -47,7 +47,7 @@ echo 'Web Server version => '$Web_Server_version''
 
 echo -n 'Which PHP Server version you want to install [5.4|5.5|5.6|7.0|7.1]: '
 read PHP_Server_version
-if [ "$PHP_Server_version" != "5.4" ] && [ "$PHP_Server_version" != "5.5" ] && [ "$PHP_Server_version" != "5.6" ] && [ "$PHP_Server_version" != "7.0" ] && [ "$PHP_Server_version" != "7.1" ]; then
+if [ "$PHP_Server_version" != "5.4" ] && [ "$PHP_Server_version" != "5.5" ] && [ "$PHP_Server_version" != "5.6" ] && [ "$PHP_Server_version" != "7.0" ] && [ "$PHP_Server_version" != "7.1" ] && [ "$PHP_Server_version" != "all" ]; then
 PHP_Server_version=7.1
 fi
 echo 'PHP Server version => '$PHP_Server_version''
@@ -159,6 +159,11 @@ Remi_yn='--remi no'
 MariaDB_Server_version='5.5'
 fi
 
+PHP_Selector_yn=n
+if [ "$PHP_Server_version" = "all" ]; then
+PHP_Server_version='71'
+PHP_Selector_yn='y'
+fi
 
 if [ "$MariaDB_Server_version" = "5.5" ]; then
 MariaDB_Server_version='5.5'
@@ -191,6 +196,7 @@ Web_Server_version='--nginx no --apache yes --phpfpm no'
 fi
 if [ "$Web_Server_version" = "nginx" ]; then
 Web_Server_version='--nginx yes --apache no --phpfpm yes'
+PHP_Selector_yn=n
 fi
 if [ "$Spamassassin_Clamav_yn" = "y" ]; then
 Spamassassin_Clamav_yn='--spamassassin yes --clamav yes'
@@ -231,6 +237,9 @@ if [ "$Limit_Hosting_yn" = "y" ]; then
 yum -y install libcgroup
 yum -y install libcgroup-pam
 echo "session         optional        pam_cgroup.so" >> /etc/pam.d/su
+curl -L https://github.com/duy13/VDVESTA/raw/master/Limit-Hosting -o /usr/bin/Limit-Hosting
+chmod 700 /usr/bin/Limit-Hosting
+
 fi
 
 if [ "$Kernel_limit_DDOS_yn" = "y" ]; then
@@ -383,8 +392,18 @@ cp /usr/local/vesta/web/css/styles.min.css /usr/local/vesta/web/css/styles.min.c
 s='background-position: -117px -7px;'
 r='background-position: -117px -55px;'
 sed -i "s#$s#$r#g"  /usr/local/vesta/web/css/styles.min.css
-s='5d5d5d;' 
+s='5d5d5d;'
 r='DF0022;'
+num=$(( $RANDOM % 9 + 1))
+if [ $num = '1' ]; then r="DF0022;"; fi
+if [ $num = '2' ]; then r="9cdf00;"; fi
+if [ $num = '3' ]; then r="00df4a;"; fi
+if [ $num = '4' ]; then r="00dfbd;"; fi
+if [ $num = '5' ]; then r="6400df;"; fi
+if [ $num = '6' ]; then r="0068df;"; fi
+if [ $num = '7' ]; then r="34df00;"; fi
+if [ $num = '8' ]; then r="00df8d;"; fi
+if [ $num = '9' ]; then r="000000;"; fi
 sed -i "s#$s#$r#g" /usr/local/vesta/web/css/styles.min.css
 
 VESTA='/usr/local/vesta/'
@@ -397,7 +416,7 @@ source /usr/local/vesta/conf/vesta.conf >/dev/null 2>&1
 /usr/local/vesta/bin/v-delete-cron-job admin 8 >/dev/null 2>&1
 
 /usr/local/vesta/bin/v-delete-user-package gainsboro >/dev/null 2>&1
-/usr/local/vesta/bin/v-delete-user-package palegreen >/dev/null 2>&1 >/dev/null 2>&1
+/usr/local/vesta/bin/v-delete-user-package palegreen >/dev/null 2>&1
 /usr/local/vesta/bin/v-delete-user-package slategrey >/dev/null 2>&1
 
 echo "WEB_TEMPLATE='default'
@@ -535,6 +554,15 @@ if [ ! -f /etc/rc.d/init.d/vesta ]; then
 fi
 
 
+if [ "$PHP_Selector_yn" = "y" ]; then
+
+curl -L https://github.com/duy13/VDVESTA/raw/master/PHP-Selector -o PHP-Selector
+chmod 700 PHP-Selector
+./PHP-Selector
+rm -f PHP-Selector
+fi
+
+
 if [ "$vDDoS_yn" = "y" ]; then
 
 curl -L https://github.com/duy13/vDDoS-Protection/raw/master/vddos-1.13.3-centos7 -o /usr/bin/vddos
@@ -590,7 +618,7 @@ php -v
 
 echo '
 =====> Install and Config VDVESTA Done! <=====
- Link VestaCP: https://'$IP':2083 or https://'$IP':8083
+Link VestaCP: https://'$IP':2083 or https://'$IP':8083
 	username: admin
 	password: '$password'
 
