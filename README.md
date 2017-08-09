@@ -116,9 +116,9 @@ PHP Selector:
 -------------
 ![alt text](https://lh4.googleusercontent.com/-5QCY99roQb8/WYsnHyZMhaI/AAAAAAAABmM/VcZ9UUCDX9U-nwKR1vxNX3t-3P8tjz9SwCLcBGAs/s1600/VDVESTA-PHP-Selector.png "vdvesta php selector screenshot 2")
 
-File Manager and Limit Hosting:
+Limit Hosting:
 -------------
-![alt text](https://lh4.googleusercontent.com/-loiZT9F9rx4/WYsq6O4EZRI/AAAAAAAABmc/-zLHUu1Pa84pw8SOkbEql6fkxI33UIfkQCLcBGAs/s1600/VDVESTA-File-Manager-and-Limit-Hosting.png "vdvesta file manager & limit hosting screenshot 3")
+![alt text](https://lh4.googleusercontent.com/-Oi4bsdKcKfI/WYs502wI7TI/AAAAAAAABms/9At8G3STbmc3MNEuXe8kInlzFNb53vcWgCLcBGAs/s1600/VDVESTA-Limit-Hosting.png "vdvesta limit hosting screenshot 3")
 
 3/ More Config:
 ---------------

@@ -599,13 +599,13 @@ sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /opt/remi/php56/root
 sed -i "/^memory_limit/c memory_limit = 500M" /opt/remi/php56/root/etc/php.ini
 sed -i "/^max_execution_time/c max_execution_time = 5000" /opt/remi/php56/root/etc/php.ini
 
-cp /opt/remi/php70/root/etc/php.ini /opt/remi/php70/root/etc/php.ini.bak.$random
-sed -i "/^short_open_tag/c short_open_tag = On" /opt/remi/php70/root/etc/php.ini
-sed -i '/^;default_charset/c default_charset = "UTF-8"' /opt/remi/php70/root/etc/php.ini
-sed -i "/^post_max_size/c post_max_size = 500M" /opt/remi/php70/root/etc/php.ini
-sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /opt/remi/php70/root/etc/php.ini
-sed -i "/^memory_limit/c memory_limit = 500M" /opt/remi/php70/root/etc/php.ini
-sed -i "/^max_execution_time/c max_execution_time = 5000" /opt/remi/php70/root/etc/php.ini
+cp /etc/opt/remi/php70/php.ini /etc/opt/remi/php70/php.ini.bak.$random
+sed -i "/^short_open_tag/c short_open_tag = On" /etc/opt/remi/php70/php.ini
+sed -i '/^;default_charset/c default_charset = "UTF-8"' /etc/opt/remi/php70/php.ini
+sed -i "/^post_max_size/c post_max_size = 500M" /etc/opt/remi/php70/php.ini
+sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /etc/opt/remi/php70/php.ini
+sed -i "/^memory_limit/c memory_limit = 500M" /etc/opt/remi/php70/php.ini
+sed -i "/^max_execution_time/c max_execution_time = 5000" /etc/opt/remi/php70/php.ini
 
 fi
 
