@@ -111,7 +111,7 @@ Zend Engine v3.1.0, Copyright (c) 1998-2017 Zend Technologies
 vdvesta screenshot:
 -------------
 ![alt text](https://lh4.googleusercontent.com/-nS-2ZADtcpM/WK0GalcZfiI/AAAAAAAABI0/NELyFr6k-iMQkVEOGKylP55ibSDliu2gQCLcB/s1600/VDVESTA.png "vdvesta screenshot 1")
-![alt text](https://lh4.googleusercontent.com/-nS-2ZADtcpM/WK0GalcZfiI/AAAAAAAABI0/NELyFr6k-iMQkVEOGKylP55ibSDliu2gQCLcB/s1600/VDVESTA.png "vdvesta php selector screenshot 2")
+![alt text](https://lh4.googleusercontent.com/-5QCY99roQb8/WYsnHyZMhaI/AAAAAAAABmM/VcZ9UUCDX9U-nwKR1vxNX3t-3P8tjz9SwCLcBGAs/s1600/VDVESTA-PHP-Selector.png "vdvesta php selector screenshot 2")
 
 3/ More Config:
 ---------------
