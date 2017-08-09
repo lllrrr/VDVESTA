@@ -12,7 +12,7 @@ os=$(cut -f 1 -d ' ' /etc/redhat-release)
 release=$(grep -o "[0-9]" /etc/redhat-release |head -n1)
 arch=`arch`
 random=`cat /dev/urandom | tr -cd 'A-Z0-9' | head -c 5`
-password=`cat /dev/urandom | tr -cd 'A-Z0-9' | head -c 20`
+password=`cat /dev/urandom | tr -cd 'A-Z0-9' | head -c 25`
 IP=`curl -s -L http://cpanel.net/showip.cgi`
 if [ ! -f /etc/redhat-release ] || [ "$os" != "CentOS" ] || [ "$release" != "7" ]; then
 echo 'ERROR! Please use CentOS Linux release 7 x86_64!
@@ -45,12 +45,23 @@ Web_Server_version=apache
 fi
 echo 'Web Server version => '$Web_Server_version''
 
-echo -n 'Which PHP Server version you want to install [5.4|5.5|5.6|7.0|7.1]: '
+if [ "$Web_Server_version" = "apache" ]; then
+echo -n 'Which PHP Server version you want to install [all|5.4|5.5|5.6|7.0|7.1]: '
 read PHP_Server_version
 if [ "$PHP_Server_version" != "5.4" ] && [ "$PHP_Server_version" != "5.5" ] && [ "$PHP_Server_version" != "5.6" ] && [ "$PHP_Server_version" != "7.0" ] && [ "$PHP_Server_version" != "7.1" ] && [ "$PHP_Server_version" != "all" ]; then
 PHP_Server_version=7.1
 fi
 echo 'PHP Server version => '$PHP_Server_version''
+fi
+
+if [ "$Web_Server_version" = "nginx" ]; then
+echo -n 'Which PHP Server version you want to install [5.4|5.5|5.6|7.0|7.1]: '
+read PHP_Server_version
+if [ "$PHP_Server_version" != "5.4" ] && [ "$PHP_Server_version" != "5.5" ] && [ "$PHP_Server_version" != "5.6" ] && [ "$PHP_Server_version" != "7.0" ] && [ "$PHP_Server_version" != "7.1" ]; then
+PHP_Server_version=7.1
+fi
+echo 'PHP Server version => '$PHP_Server_version''
+fi
 
 echo -n 'Would you like auto config PHP [Y|n]: '
 read auto_config_PHP_yn
@@ -555,11 +566,51 @@ fi
 
 
 if [ "$PHP_Selector_yn" = "y" ]; then
-
+cp -r /etc/httpd /etc/httpd-bak-$random
 curl -L https://github.com/duy13/VDVESTA/raw/master/PHP-Selector -o PHP-Selector
 chmod 700 PHP-Selector
 ./PHP-Selector
 rm -f PHP-Selector
+rm -rf /etc/httpd
+mv /etc/httpd-bak-$random /etc/httpd
+
+if [ "$auto_config_PHP_yn" = "y" ]; then
+cp /opt/remi/php54/root/etc/php.ini /opt/remi/php54/root/etc/php.ini.bak.$random
+sed -i "/^short_open_tag/c short_open_tag = On" /opt/remi/php54/root/etc/php.ini
+sed -i '/^;default_charset/c default_charset = "UTF-8"' /opt/remi/php54/root/etc/php.ini
+sed -i "/^post_max_size/c post_max_size = 500M" /opt/remi/php54/root/etc/php.ini
+sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /opt/remi/php54/root/etc/php.ini
+sed -i "/^memory_limit/c memory_limit = 500M" /opt/remi/php54/root/etc/php.ini
+sed -i "/^max_execution_time/c max_execution_time = 5000" /opt/remi/php54/root/etc/php.ini
+
+cp /opt/remi/php55/root/etc/php.ini /opt/remi/php55/root/etc/php.ini.bak.$random
+sed -i "/^short_open_tag/c short_open_tag = On" /opt/remi/php55/root/etc/php.ini
+sed -i '/^;default_charset/c default_charset = "UTF-8"' /opt/remi/php55/root/etc/php.ini
+sed -i "/^post_max_size/c post_max_size = 500M" /opt/remi/php55/root/etc/php.ini
+sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /opt/remi/php55/root/etc/php.ini
+sed -i "/^memory_limit/c memory_limit = 500M" /opt/remi/php55/root/etc/php.ini
+sed -i "/^max_execution_time/c max_execution_time = 5000" /opt/remi/php55/root/etc/php.ini
+
+cp /opt/remi/php56/root/etc/php.ini /opt/remi/php56/root/etc/php.ini.bak.$random
+sed -i "/^short_open_tag/c short_open_tag = On" /opt/remi/php56/root/etc/php.ini
+sed -i '/^;default_charset/c default_charset = "UTF-8"' /opt/remi/php56/root/etc/php.ini
+sed -i "/^post_max_size/c post_max_size = 500M" /opt/remi/php56/root/etc/php.ini
+sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /opt/remi/php56/root/etc/php.ini
+sed -i "/^memory_limit/c memory_limit = 500M" /opt/remi/php56/root/etc/php.ini
+sed -i "/^max_execution_time/c max_execution_time = 5000" /opt/remi/php56/root/etc/php.ini
+
+cp /opt/remi/php70/root/etc/php.ini /opt/remi/php70/root/etc/php.ini.bak.$random
+sed -i "/^short_open_tag/c short_open_tag = On" /opt/remi/php70/root/etc/php.ini
+sed -i '/^;default_charset/c default_charset = "UTF-8"' /opt/remi/php70/root/etc/php.ini
+sed -i "/^post_max_size/c post_max_size = 500M" /opt/remi/php70/root/etc/php.ini
+sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /opt/remi/php70/root/etc/php.ini
+sed -i "/^memory_limit/c memory_limit = 500M" /opt/remi/php70/root/etc/php.ini
+sed -i "/^max_execution_time/c max_execution_time = 5000" /opt/remi/php70/root/etc/php.ini
+
+fi
+
+service httpd restart >/dev/null 2>&1
+
 fi
 
 

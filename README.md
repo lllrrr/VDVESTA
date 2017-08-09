@@ -32,7 +32,7 @@ Would you like +install vDDoS Proxy Protection [Y|n]:
 vDDoS Proxy Protection install => y
 Which Web Server version you want to install [apache|nginx]:
 Web Server version => apache
-Which PHP Server version you want to install [5.4|5.5|5.6|7.0|7.1]:
+Which PHP Server version you want to install [all|5.4|5.5|5.6|7.0|7.1]:
 PHP Server version => 7.1
 Would you like auto config PHP [Y|n]:
 Auto config PHP => y
@@ -83,6 +83,14 @@ Following software will be installed on your system:
 Would you like to continue [y/n]: y
 
 ......................................
+......................................
+......................................
+......................................
+
+......................................
+......................................
+......................................
+......................................
 
 Server version: Apache/2.4.16 (Unix)
 mysql  Ver 15.1 Distrib 10.1.21-MariaDB, for Linux (x86_64) using readline 5.1
@@ -102,9 +110,10 @@ Zend Engine v3.1.0, Copyright (c) 1998-2017 Zend Technologies
 
 vdvesta screenshot:
 -------------
-![alt text](https://lh4.googleusercontent.com/-nS-2ZADtcpM/WK0GalcZfiI/AAAAAAAABI0/NELyFr6k-iMQkVEOGKylP55ibSDliu2gQCLcB/s1600/VDVESTA.png "Logo Title Text 1")
+![alt text](https://lh4.googleusercontent.com/-nS-2ZADtcpM/WK0GalcZfiI/AAAAAAAABI0/NELyFr6k-iMQkVEOGKylP55ibSDliu2gQCLcB/s1600/VDVESTA.png "vdvesta screenshot 1")
+![alt text](https://lh4.googleusercontent.com/-nS-2ZADtcpM/WK0GalcZfiI/AAAAAAAABI0/NELyFr6k-iMQkVEOGKylP55ibSDliu2gQCLcB/s1600/VDVESTA.png "vdvesta php selector screenshot 2")
 
-3. More Config:
+3/ More Config:
 ---------------
 Document: http://vdvesta.voduy.com
 ```
