@@ -607,6 +607,12 @@ sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /etc/opt/remi/php70/
 sed -i "/^memory_limit/c memory_limit = 500M" /etc/opt/remi/php70/php.ini
 sed -i "/^max_execution_time/c max_execution_time = 5000" /etc/opt/remi/php70/php.ini
 
+echo '<IfModule mod_fcgid.c>
+AddHandler    fcgid-script .fcgi
+FcgidConnectTimeout 5000
+FcgidMaxRequestLen 500000000
+</IfModule>
+' >> /etc/httpd/conf.d/fcgid.conf
 fi
 
 service httpd restart >/dev/null 2>&1
