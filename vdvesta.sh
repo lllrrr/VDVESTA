@@ -609,8 +609,13 @@ sed -i "/^max_execution_time/c max_execution_time = 5000" /etc/opt/remi/php70/ph
 
 echo '<IfModule mod_fcgid.c>
 AddHandler    fcgid-script .fcgi
-FcgidConnectTimeout 5000
-FcgidMaxRequestLen 500000000
+FcgidIdleTimeout 40
+FcgidProcessLifeTime 30
+FcgidMaxProcesses 20
+FcgidConnectTimeout 30
+FcgidIOTimeout 45
+FcgidIdleScanInterval 10
+FcgidMaxRequestLen 20971520
 </IfModule>
 ' >> /etc/httpd/conf.d/fcgid.conf
 fi
