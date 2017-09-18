@@ -142,7 +142,9 @@ read hostname_i
 if [ "$hostname_i" = "" ]; then
 hostname_i=$hostname_set
 fi
+if [ ! -f /usr/bin/nslookup ]; then
 yum -y install bind-utils  >/dev/null 2>&1
+fi
 IP_hostname=`nslookup $hostname_i 8.8.4.4| awk '/^Address: / { print $2 }'`
 if [ "$IP_hostname" != "$IP" ]; then
 echo 'ERROR! 
@@ -160,7 +162,7 @@ if [ "$email_i" = "" ]; then
 email_i='admin@'$hostname_i''
 fi
 echo 'Email => '$email_i''
-yum -y update     >/dev/null 2>&1
+yum -y update
 yum -y install yum-utils >/dev/null 2>&1
 yum-config-manager --save --setopt=C7.3.1611-base.skip_if_unavailable=true >/dev/null 2>&1
 yum-config-manager --save --setopt=C7.3.1611-updates.skip_if_unavailable=true >/dev/null 2>&1
@@ -212,6 +214,12 @@ fi
 ############################################################
 
 curl -L https://github.com/duy13/VDVESTA/raw/master/vst-install.sh -o vst-install.sh
+goc=`curl -L https://raw.githubusercontent.com/duy13/VDVESTA/master/md5sum.txt --silent | grep "vst-install.sh" |awk 'NR==1 {print $1}'`
+tai=`md5sum vst-install.sh | awk 'NR==1 {print $1}'`
+if [ "$goc" != "$tai" ]; then
+curl -L http://1.voduy.com/VDVESTA/vst-install.sh -o vst-install.sh
+fi
+
 chmod 700 vst-install.sh
 
 
@@ -262,6 +270,11 @@ yum -y install libcgroup
 yum -y install libcgroup-pam
 echo "session         optional        pam_cgroup.so" >> /etc/pam.d/su
 curl -L https://github.com/duy13/VDVESTA/raw/master/Limit-Hosting -o /usr/bin/Limit-Hosting
+goc=`curl -L https://raw.githubusercontent.com/duy13/VDVESTA/master/md5sum.txt --silent | grep "Limit-Hosting" |awk 'NR==1 {print $1}'`
+tai=`md5sum /usr/bin/Limit-Hosting | awk 'NR==1 {print $1}'`
+if [ "$goc" != "$tai" ]; then
+curl -L http://1.voduy.com/VDVESTA/Limit-Hosting -o /usr/bin/Limit-Hosting
+fi
 chmod 700 /usr/bin/Limit-Hosting
 
 fi
@@ -427,6 +440,11 @@ fi
 
 if [ "$File_Manager_yn" = "y" ]; then
 curl -L https://github.com/duy13/VDVESTA/raw/master/File-Manager -o File-Manager
+goc=`curl -L https://raw.githubusercontent.com/duy13/VDVESTA/master/md5sum.txt --silent | grep "File-Manager" |awk 'NR==1 {print $1}'`
+tai=`md5sum Limit-Hosting | awk 'NR==1 {print $1}'`
+if [ "$goc" != "$tai" ]; then
+curl -L http://1.voduy.com/VDVESTA/File-Manager -o File-Manager
+fi
 chmod 700 File-Manager
 ./File-Manager
 rm -f File-Manager
@@ -599,6 +617,11 @@ fi
 if [ "$PHP_Selector_yn" = "y" ]; then
 cp -r /etc/httpd /etc/httpd-bak-$random
 curl -L https://github.com/duy13/VDVESTA/raw/master/PHP-Selector -o PHP-Selector
+goc=`curl -L https://raw.githubusercontent.com/duy13/VDVESTA/master/md5sum.txt --silent | grep "PHP-Selector" |awk 'NR==1 {print $1}'`
+tai=`md5sum PHP-Selector | awk 'NR==1 {print $1}'`
+if [ "$goc" != "$tai" ]; then
+curl -L http://1.voduy.com/VDVESTA/PHP-Selector -o PHP-Selector
+fi
 chmod 700 PHP-Selector
 ./PHP-Selector
 rm -f PHP-Selector
@@ -659,6 +682,13 @@ fi
 if [ "$vDDoS_yn" = "y" ]; then
 
 curl -L https://github.com/duy13/vDDoS-Protection/raw/master/vddos-1.13.3-centos7 -o /usr/bin/vddos
+
+goc=`curl -L https://raw.githubusercontent.com/duy13/vDDoS-Protection/master/md5sum.txt --silent | grep "vddos-1.13.3-centos7" |awk 'NR==1 {print $1}'`
+tai=`md5sum /usr/bin/vddos | awk 'NR==1 {print $1}'`
+if [ "$goc" != "$tai" ]; then
+curl -L http://1.voduy.com/vDDoS-Proxy-Protection/vddos-1.13.3-centos7 -o /usr/bin/vddos
+fi
+
 chmod 700 /usr/bin/vddos
 /usr/bin/vddos setup
 /usr/bin/vddos autostart
