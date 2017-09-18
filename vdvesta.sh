@@ -12,7 +12,7 @@ os=$(cut -f 1 -d ' ' /etc/redhat-release)
 release=$(grep -o "[0-9]" /etc/redhat-release |head -n1)
 arch=`arch`
 random=`cat /dev/urandom | tr -cd 'A-Z0-9' | head -c 5`
-password=`cat /dev/urandom | tr -cd 'A-Z0-9' | head -c 25`
+password=`cat /dev/urandom | tr -cd 'A-Za-z0-9@#$%' | head -c 5`
 IP=`curl -s -L http://cpanel.net/showip.cgi`
 if [ ! -f /etc/redhat-release ] || [ "$os" != "CentOS" ] || [ "$release" != "7" ]; then
 echo 'ERROR! Please use CentOS Linux release 7 x86_64!
@@ -142,6 +142,16 @@ read hostname_i
 if [ "$hostname_i" = "" ]; then
 hostname_i=$hostname_set
 fi
+yum -y install bind-utils  >/dev/null 2>&1
+IP_hostname=`nslookup $hostname_i 8.8.4.4| awk '/^Address: / { print $2 }'`
+if [ "$IP_hostname" != "$IP" ]; then
+echo 'ERROR! 
+Your IP Server is '$IP' 
+Your IP Hostname is '$IP_hostname'
+Please point your Domain DNS A record '$hostname_i' to '$IP' and try again!'
+exit 0
+fi
+
 echo 'Hostname => '$hostname_i''
 
 echo -n 'Enter your Email [admin@'$hostname_i']: '
@@ -361,6 +371,24 @@ sed -i "/^upload_max_filesize/c upload_max_filesize = 500M" /etc/php.ini
 sed -i "/^memory_limit/c memory_limit = 500M" /etc/php.ini
 sed -i "/^max_execution_time/c max_execution_time = 5000" /etc/php.ini
 fi
+
+
+
+yum -y install socat
+wget -O -  https://get.acme.sh | sh
+/root/.acme.sh/acme.sh --issue -d $hostname_i -w /home/admin/web/$hostname_i/public_html
+if [ -f /root/.acme.sh/$hostname_i/fullchain.cer ]; then
+rm -rf /usr/local/vesta/ssl/*
+
+ln -s /root/.acme.sh/$hostname_i/fullchain.cer /usr/local/vesta/ssl/certificate.crt
+ln -s /root/.acme.sh/$hostname_i/$hostname_i.key /usr/local/vesta/ssl/certificate.key
+
+service vesta restart
+
+fi
+
+
+
 
 if [ "$vDDoS_yn" = "y" ]; then
 s='80' ; r='8080'
@@ -683,7 +711,7 @@ php -v
 
 echo '
 =====> Install and Config VDVESTA Done! <=====
-Link VestaCP: https://'$IP':2083 or https://'$IP':8083
+VestaCP: https://'$hostname_i':2083 or https://'$IP':8083
 	username: admin
 	password: '$password'
 
