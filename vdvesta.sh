@@ -150,6 +150,7 @@ if [ "$email_i" = "" ]; then
 email_i='admin@'$hostname_i''
 fi
 echo 'Email => '$email_i''
+yum -y update
 yum -y install yum-utils >/dev/null 2>&1
 yum-config-manager --save --setopt=C7.3.1611-base.skip_if_unavailable=true >/dev/null 2>&1
 yum-config-manager --save --setopt=C7.3.1611-updates.skip_if_unavailable=true >/dev/null 2>&1
