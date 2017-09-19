@@ -146,6 +146,9 @@ if [ ! -f /usr/bin/nslookup ]; then
 yum -y install bind-utils  >/dev/null 2>&1
 fi
 IP_hostname=`nslookup $hostname_i 8.8.4.4| awk '/^Address: / { print $2 }'`
+if [ "$IP_hostname" = "" ]; then
+IP_hostname='UNKNOWN'
+fi
 if [ "$IP_hostname" != "$IP" ]; then
 echo 'ERROR! 
 Your IP Server is '$IP' 
