@@ -665,14 +665,30 @@ sed -i "/^memory_limit/c memory_limit = 500M" /etc/opt/remi/php70/php.ini
 sed -i "/^max_execution_time/c max_execution_time = 5000" /etc/opt/remi/php70/php.ini
 
 echo '<IfModule mod_fcgid.c>
-AddHandler    fcgid-script .fcgi
-FcgidIdleTimeout 40
-FcgidProcessLifeTime 30
-FcgidMaxProcesses 20
-FcgidConnectTimeout 30
-FcgidIOTimeout 45
-FcgidIdleScanInterval 10
-FcgidMaxRequestLen 20971520
+  AddHandler    fcgid-script .fcgi
+  FcgidConnectTimeout 20
+  FcgidMinProcessesPerClass 0
+  FcgidMaxProcessesPerClass 10
+  FcgidMaxProcesses 50
+  FcgidIdleTimeout 20
+  FcgidProcessLifeTime 120
+  FcgidIdleScanInterval 30
+
+
+  # Change the rate at which new FastCGI processes are spawned under load. Higher=faster
+  FcgidSpawnScoreUpLimit 10
+
+  # Higher number = spawning more FastCGI processes decreases the spawn rate (controls runaway
+  FcgidSpawnScore 2
+
+  # Higher number = terminating FastCGI processes decreases the spawn rate (controls runaway)
+  FcgidTerminationScore 2
+
+  # Increase the FastCGI max request length for large file uploads (needed for some sites)
+  FcgidMaxRequestLen 10000000
+
+  FcgidMaxRequestsPerProcess 100000
+  FcgidIOTimeout 1800
 </IfModule>
 ' >> /etc/httpd/conf.d/fcgid.conf
 fi
