@@ -392,6 +392,7 @@ fi
 
 yum -y install socat
 wget -O -  https://get.acme.sh | sh
+echo '@monthly root sleep 10 && service vesta restart' | sudo tee --append /etc/crontab  >/dev/null 2>&1
 /root/.acme.sh/acme.sh --issue -d $hostname_i -w /home/admin/web/$hostname_i/public_html
 if [ -f /root/.acme.sh/$hostname_i/fullchain.cer ]; then
 rm -rf /usr/local/vesta/ssl/*
