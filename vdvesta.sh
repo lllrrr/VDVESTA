@@ -721,7 +721,19 @@ fi
 /usr/bin/vddos restart >/dev/null 2>&1
 service mariadb restart >/dev/null 2>&1
 service memcached restart >/dev/null 2>&1
-service vesta restart >/dev/null 2>&1
+
+if [ ! -f /root/.acme.sh/$hostname_i/fullchain.cer ]; then
+/root/.acme.sh/acme.sh --issue -d $hostname_i -w /home/admin/web/$hostname_i/public_html
+	if [ -f /root/.acme.sh/$hostname_i/fullchain.cer ]; then
+	rm -rf /usr/local/vesta/ssl/*
+
+	ln -s /root/.acme.sh/$hostname_i/fullchain.cer /usr/local/vesta/ssl/certificate.crt
+	ln -s /root/.acme.sh/$hostname_i/$hostname_i.key /usr/local/vesta/ssl/certificate.key
+
+	service vesta restart 
+	fi
+fi
+
 clear
 
 if [ "$Web_Server_version" = "--nginx no --apache yes --phpfpm no" ]; then
